@@ -23,6 +23,14 @@ getPuzzle('2')
 // // Making an HTTP request
 
 
+getCountry('RO')
+  .then(country => {
+    console.log(country)
+  })
+  .catch(error => {
+    console.log(error)
+  })
+
 // getCountry('RO')
 //   .then(response => {
 //     console.log(response)

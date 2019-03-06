@@ -12,19 +12,34 @@ const getPuzzle = (wordCount) => {
 }
 
 
-const getCountry = (countryCode) => new Promise((resolve, reject) => {
-  const countryRequest = new XMLHttpRequest()
+const getCountry = (countryCode) => {
+  return fetch('https://restcountries.eu/rest/v2/all')
+    .then((response) => {
+      if(response.status === 200) {
+        return response.json()
+      } else {
+        throw new Error('Unable to fetch data')
+      }
+    })
+    .then((countries) => {
+      return countries.find((c) => c.alpha2Code === countryCode)
+    })
+    .then(country => country.name)
+}
 
-  countryRequest.addEventListener('readystatechange', (e) => {
-    if(e.target.readyState === 4 && e.target.status === 200) {
-      const countries = JSON.parse(e.target.responseText)
-      const country = countries.find((c) => c.alpha2Code === countryCode)
-      resolve(country.name)
-    } else if(e.target.readyState === 4) {
-      reject('Unable to fetch data')
-    }
-  })
+// const getCountry = (countryCode) => new Promise((resolve, reject) => {
+//   const countryRequest = new XMLHttpRequest()
+
+//   countryRequest.addEventListener('readystatechange', (e) => {
+//     if(e.target.readyState === 4 && e.target.status === 200) {
+//       const countries = JSON.parse(e.target.responseText)
+//       const country = countries.find((c) => c.alpha2Code === countryCode)
+//       resolve(country.name)
+//     } else if(e.target.readyState === 4) {
+//       reject('Unable to fetch data')
+//     }
+//   })
   
-  countryRequest.open('GET', 'https://restcountries.eu/rest/v2/all')
-  countryRequest.send()
-})
+//   countryRequest.open('GET', 'https://restcountries.eu/rest/v2/all')
+//   countryRequest.send()
+// })
