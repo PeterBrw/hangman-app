@@ -23,19 +23,16 @@ const getPuzzleOld = (wordCount) => {
 }
 
 
-const getCountry = (countryCode) => {
-  return fetch('https://restcountries.eu/rest/v2/all')
-    .then((response) => {
+const getCountry = async (countryCode) => {
+  const response = await fetch('https://restcountries.eu/rest/v2/all')
+  
       if(response.status === 200) {
-        return response.json()
+        const data = await response.json()
+        const country = await data.find((c) => c.alpha2Code === countryCode)
+        return country.name
       } else {
         throw new Error('Unable to fetch data')
       }
-    })
-    .then((countries) => {
-      return countries.find((c) => c.alpha2Code === countryCode)
-    })
-    .then(country => country.name)
 }
 
 // const getCountry = (countryCode) => new Promise((resolve, reject) => {
